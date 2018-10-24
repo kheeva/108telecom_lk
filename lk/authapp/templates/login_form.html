@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+    <form class="form-inline">
+        <input class="form-control mr-2" type="text" id="username" placeholder="Enter username">
+        <input class="form-control mr-2" type="text" id="password" placeholder="Password">
+        <div class="form-check">
+            <label class="form-check-label mr-2">
+                <input type="checkbox" class="form-check-input"> Remember me
+            </label>
+        </div>
+
+        <button class="btn btn-light" type="submit">Submit</button>
+    </form>
+{% endblock %}

@@ -1,0 +1,48 @@
+from django.db import models
+
+
+class Users108telecom(models.Model):
+    login = models.CharField(max_length=255)
+    password = models.CharField(max_length=255)
+    basic_account = models.IntegerField()
+    advance_payment = models.IntegerField()
+    create_date = models.IntegerField()
+    last_change_date = models.IntegerField()
+    who_create = models.IntegerField()
+    who_change = models.IntegerField()
+    is_juridical = models.IntegerField()
+    full_name = models.TextField(blank=True, null=True)
+    juridical_address = models.TextField(blank=True, null=True)
+    actual_address = models.TextField(blank=True, null=True)
+    work_telephone = models.CharField(max_length=255)
+    home_telephone = models.CharField(max_length=255)
+    mobile_telephone = models.CharField(max_length=255)
+    web_page = models.CharField(max_length=255)
+    icq_number = models.CharField(max_length=255)
+    tax_number = models.CharField(max_length=255)
+    kpp_number = models.CharField(max_length=255)
+    bank_id = models.IntegerField()
+    bank_account = models.CharField(max_length=255)
+    email = models.CharField(max_length=255)
+    house_id = models.IntegerField()
+    flat_number = models.CharField(max_length=255)
+    entrance = models.CharField(max_length=255)
+    floor = models.CharField(max_length=255)
+    district = models.CharField(max_length=255)
+    building = models.CharField(max_length=255)
+    passport = models.CharField(max_length=255)
+    comments = models.TextField(blank=True, null=True)
+    personal_manager = models.CharField(max_length=255)
+    connect_date = models.IntegerField()
+    remote_switch_id = models.IntegerField()
+    port_number = models.IntegerField()
+    binded_currency_code = models.IntegerField()
+    is_deleted = models.IntegerField()
+    is_send_invoice = models.IntegerField()
+    ic_status = models.IntegerField()
+    ic_id = models.CharField(max_length=255)
+    last_sync_date = models.IntegerField()
+
+    class Meta:
+        managed = False
+        db_table = 'users'
