@@ -7,6 +7,7 @@ class MiddlewareConfigMixin:
     MIDDLEWARE = [
         'django.middleware.security.SecurityMiddleware',
         'django.contrib.sessions.middleware.SessionMiddleware',
+        'lk.django_session_timeout.middleware.SessionTimeoutMiddleware',
         'django.middleware.common.CommonMiddleware',
         'django.middleware.csrf.CsrfViewMiddleware',
         'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -20,7 +21,18 @@ class Base(MiddlewareConfigMixin, Configuration):
 
     SECRET_KEY = values.SecretValue()
 
+    UNITELLER_PASSWORD = values.SecretValue()
+
     ALLOWED_HOSTS = values.ListValue()
+
+    SESSION_ENGINE = 'django.contrib.sessions.backends.cache'
+    CACHES = {
+        'default': {
+            'BACKEND': 'django.core.cache.backends.locmem.LocMemCache'
+        }
+    }
+    SESSION_EXPIRE_SECONDS = 10
+    SESSION_EXPIRE_AFTER_LAST_ACTIVITY = True
 
     INSTALLED_APPS = [
         'django.contrib.admin',

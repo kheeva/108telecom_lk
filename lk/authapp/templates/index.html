@@ -3,4 +3,87 @@
 
 {% block content %}
     <p>{{ page }}</p>
+
+    {% for name, value in sess.items %}
+        <p>{{name}} : {{value}}</p>
+    {% endfor %}
+
+    <p>{{user_login}}</p>
+
+    <!-- LOGIN MODAL TRIGGER -->
+    <button class="btn btn-dark" data-toggle="modal" data-target="#payModal">Пополнить счет</button>
+
+    <!-- LOGIN MODAL -->
+    <div class="modal" id="payModal">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Пополнение лицевого счета</h5>
+            <button class="close" data-dismiss="modal">&times;</button>
+          </div>
+          <div class="modal-body">
+            <form>
+              <div class="form-group">
+                <label for="sum">Сумма</label>
+                <input id="payment_sum" name="sum" type="text" placeholder="Сумма платежа" class="form-control">
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button class="btn btn-primary" data-dismiss="modal">Пополнить</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+{% endblock %}
+
+{% block javascript %}
+    <script language="JavaScript" type="text/javascript">
+        $("#payment_sum").change(function () {
+            console.log( $(this).val() );
+        });
+    </script>
+
+
+
+    <script>
+    function getCookie(c_name)
+    {
+        if (document.cookie.length > 0)
+        {
+            c_start = document.cookie.indexOf(c_name + "=");
+            if (c_start != -1)
+            {
+                c_start = c_start + c_name.length + 1;
+                c_end = document.cookie.indexOf(";", c_start);
+                if (c_end == -1) c_end = document.cookie.length;
+                return unescape(document.cookie.substring(c_start,c_end));
+            }
+        }
+        return "";
+     }
+
+
+    $("#payment_sum").change(function () {
+      var payment_sum = $(this).val();
+      $.ajaxSetup({ headers: { "X-CSRFToken": getCookie("csrftoken"), "X-Requested-With": "XMLHttpRequest" }});
+      $.ajax({
+        type: "POST",
+        url: "{% url 'pay_prepare' %}",
+        data: {
+          'payment_sum': payment_sum
+        },
+        dataType: 'json',
+        success: function (data) {
+            alert(data.CallbackFields);
+        }
+        <!--error: function (data) {-->
+                   <!--console.log(error)-->
+               <!--}-->
+      });
+
+    });
+  </script>
+
 {% endblock %}
