@@ -40,7 +40,6 @@ def make_signature(post_attrs, _password):
     IData = ''
     PT_Code = ''
     Lifetime = ''
-    # password = 'z8H5rOHzGMrxFpoDV6NanaHImDWp7Fs9tR1RkzZTCGuHScAORSBAfSYsDJkZrqM6M0wflJzeJ9NzmXuo'
 
     Signature = uppercase(__md5(
                             __md5(Shop_IDP) + '&' + __md5(Order_IDP) + '&' +
