@@ -21,8 +21,6 @@ class Base(MiddlewareConfigMixin, Configuration):
 
     SECRET_KEY = values.SecretValue()
 
-    UNITELLER_PASSWORD = values.SecretValue()
-
     ALLOWED_HOSTS = values.ListValue()
 
     SESSION_ENGINE = 'django.contrib.sessions.backends.cache'
@@ -31,7 +29,7 @@ class Base(MiddlewareConfigMixin, Configuration):
             'BACKEND': 'django.core.cache.backends.locmem.LocMemCache'
         }
     }
-    SESSION_EXPIRE_SECONDS = 10
+    SESSION_EXPIRE_SECONDS = 20
     SESSION_EXPIRE_AFTER_LAST_ACTIVITY = True
 
     INSTALLED_APPS = [

@@ -8,8 +8,9 @@ from django.contrib.auth.models import User
 from .models import Users108
 import time
 from hashlib import md5 as hashlib_md5
-from django.conf import settings
 import json
+import os
+import requests
 
 
 context = {}
@@ -21,7 +22,7 @@ def __md5(_str):
 
 def generate_order_idp(login, sum):
     _time = str(int(time.time()))
-    return __md5(''.join([login, sum, _time]))
+    return ''.join([login, sum, _time])
 
 
 def uppercase(_str):
@@ -29,14 +30,28 @@ def uppercase(_str):
 
 
 def make_signature(post_attrs, _password):
-    _str = ''.join([
-        post_attrs['Order_ID'],
-        post_attrs['Status'],
-        post_attrs['Customer_IDP'],
-        post_attrs['BillNumber'],
-        _password,
-    ])
-    return uppercase(__md5(_str))
+    Shop_IDP = post_attrs['Shop_IDP']
+    Order_IDP = post_attrs['Order_IDP']
+    Subtotal_P = post_attrs['Subtotal_P']
+    MeanType = ''
+    EMoneyType = ''
+    Customer_IDP = post_attrs['Customer_IDP']
+    Card_IDP = ''
+    IData = ''
+    PT_Code = ''
+    Lifetime = ''
+    # password = 'z8H5rOHzGMrxFpoDV6NanaHImDWp7Fs9tR1RkzZTCGuHScAORSBAfSYsDJkZrqM6M0wflJzeJ9NzmXuo'
+
+    Signature = uppercase(__md5(
+                            __md5(Shop_IDP) + '&' + __md5(Order_IDP) + '&' +
+                            __md5(Subtotal_P) + '&' + __md5(MeanType) + '&' +
+                            __md5(EMoneyType) + '&' + __md5(Lifetime) + '&' +
+                            __md5(Customer_IDP) + '&' + __md5(Card_IDP) + '&' +
+                            __md5(IData) + '&' + __md5(PT_Code) + '&' +
+                            __md5(_password)
+                )
+    )
+    return Signature
 
 
 def get_user(username):
@@ -48,32 +63,41 @@ def get_user(username):
 
 class PreparePaymentData(View):
     def post(self, request):
-        _sum = request.POST.get('sum')
-        if _sum is None:
+        _login = request.session.get('user_login')
+
+        if _login is not None:
+            _sum = request.POST.get('payment_sum')
+            if _sum is None:
+                return HttpResponse(
+                    json.dumps({'sum': 'None'}),
+                    content_type="application/json"
+                )
+
+            response_data = {}
+            response_data['Shop_IDP'] = '00015162'
+            response_data['Order_IDP'] = generate_order_idp(_login, _sum)
+            response_data['CallbackFields'] = 'Customer_IDP BillNumber Total'
+            response_data['Subtotal_P'] = _sum
+            response_data['Customer_IDP'] = _login
+            response_data['URL_RETURN_OK'] = 'http://lk.108telecom.ru/'
+            response_data['URL_RETURN_NO'] = 'http://lk.108telecom.ru/'
+
+            # os.environ.get('UNITELLER_PASSWORD')
+            _signature = make_signature(response_data, os.environ.get('DJANGO_UNITELLER_PASSWORD'))
+            response_data['Signature'] = _signature
+
+            # r = requests.post("https://wpay.uniteller.ru/pay/", data=response_data)
+
             return HttpResponse(
-                json.dumps({'sum': 'None'}),
+                json.dumps(response_data),
                 content_type="application/json"
             )
-
-        _login = request.session['user_login']
-        response_data = {}
-        response_data['Shop_IDP'] = '00015162'
-        response_data['Order_IDP'] = generate_order_idp(_login, _sum)
-        response_data['CallbackFields'] = 'Customer_IDP BillNumber Total'
-        response_data['Subtotal_P'] = _sum
-        response_data['Customer_IDP'] = _login
-        response_data['URL_RETURN_OK'] = 'http://lk.108telecom.ru/'
-        response_data['URL_RETURN_NO'] = 'http://lk.108telecom.ru/'
-        response_data['Submit'] = 'Оплатить'
-
-
-        _signature = make_signature(response_data, settings.Base.ALLOWED_HOSTS)
-        response_data['Signature'] = _signature
-
-        return HttpResponse(
-            json.dumps(response_data),
-            content_type="application/json"
-        )
+            # return HttpResponse(
+            #     r.text,
+            #     content_type="text/html"
+            # )
+        else:
+            return Http404
 
 
 class LoginFormView(View):
