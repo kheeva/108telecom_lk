@@ -108,6 +108,7 @@ class LoginFormView(View):
         password = request.POST.get('password')
         try:
             user_to_auth = get_user(username)
+            context['user_obj'] = user_to_auth
         except:
             user_to_auth = None
 
@@ -138,6 +139,6 @@ class Main(View):
             for name, value in request.session.items():
                 context['sess'][name] = value
 
-            return render(request, 'index.html', context)
+            return render(request, 'lk_main.html', context)
         else:
             return HttpResponseRedirect("accounts/login/")

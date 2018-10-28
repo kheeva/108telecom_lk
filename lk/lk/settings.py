@@ -29,7 +29,7 @@ class Base(MiddlewareConfigMixin, Configuration):
             'BACKEND': 'django.core.cache.backends.locmem.LocMemCache'
         }
     }
-    SESSION_EXPIRE_SECONDS = 20
+    SESSION_EXPIRE_SECONDS = 60
     SESSION_EXPIRE_AFTER_LAST_ACTIVITY = True
 
     INSTALLED_APPS = [
