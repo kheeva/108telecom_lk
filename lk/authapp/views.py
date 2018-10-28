@@ -101,7 +101,7 @@ class PreparePaymentData(View):
 
 class LoginFormView(View):
     def get(self, request):
-        return render(request, 'login_form.html', context)
+        return render(request, 'login.html', context)
 
     def post(self, request):
         username = request.POST.get('login')
@@ -116,7 +116,7 @@ class LoginFormView(View):
             return HttpResponseRedirect("/")
         else:
             context['login_error'] = 'Ошибка: логин или пароль введены неверно.'
-            return render(request, 'login_form.html', context)
+            return render(request, 'login.html', context)
 
 
 class Logout(View):

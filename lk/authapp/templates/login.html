@@ -1,0 +1,92 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+    <nav class="navbar navbar-expand-sm navbar-dark bg-dark p-0">
+        <div class="container">
+          <a href="http://108telecom.ru" class="navbar-brand">108telecom</a>
+        </div>
+    </nav>
+
+  <!-- HEADER -->
+  <header id="main-header" class="py-2 bg-primary text-white">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-6">
+          <h1>
+              <i class="fas fa-user"></i>   Личный кабинет</h1>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ACTIONS -->
+  <section id="actions" class="py-4 mb-4 bg-light">
+    <div class="container">
+      <div class="row">
+
+      </div>
+    </div>
+  </section>
+
+
+    <section id="login">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-6 mx-auto">
+          <div class="card">
+            <div class="card-header d-none d-sm-block">
+              <h4 class="text-center">Вход</h4>
+            </div>
+            <div class="card-body">
+              <form action="{% url 'login_form' %}" method="post">{% csrf_token %}
+                <div class="form-group">
+                  <label for="username">ПИН</label>
+                  <input type="text" class="form-control" name="login">
+                </div>
+                <div class="form-group">
+                  <label for="password">Пароль</label>
+                  <input type="password" class="form-control" name="password">
+                </div>
+                <input type="submit" value="Войти" class="btn btn-primary btn-block">
+
+                  {% if login_error %}
+                    <div class="alert alert-danger mt-3 mb-0" role="alert">
+                        {{login_error}}
+                        {{username}}
+                        {{user_pass}}
+                    </div>
+                  {% endif %}
+
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+
+    <footer id="main-footer" class="fixed-bottom bg-dark text-white p-5">
+        <div class="container">
+          <div class="row">
+            <div class="col">
+              <p class="lead text-center">
+                108telecom &copy;
+                <span id="year"></span>
+              </p>
+            </div>
+          </div>
+        </div>
+    </footer>
+
+
+{% endblock %}
+
+{% block javascript %}
+        <script>
+            // Get the current year for the copyright
+            $('#year').text(new Date().getFullYear());
+        </script>
+{% endblock %}
