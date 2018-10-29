@@ -189,70 +189,6 @@
       </div>
     </div>
 
-
-
-  <!-- ADD CATEGORY MODAL -->
-  <div class="modal fade" id="addCategoryModal">
-    <div class="modal-dialog modal-lg">
-      <div class="modal-content">
-        <div class="modal-header bg-success text-white">
-          <h5 class="modal-title">Add Category</h5>
-          <button class="close" data-dismiss="modal">
-            <span>&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-          <form>
-            <div class="form-group">
-              <label for="title">Title</label>
-              <input type="text" class="form-control">
-            </div>
-          </form>
-        </div>
-        <div class="modal-footer">
-          <button class="btn btn-success" data-dismiss="modal">Save Changes</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- ADD USER MODAL -->
-  <div class="modal fade" id="addUserModal">
-    <div class="modal-dialog modal-lg">
-      <div class="modal-content">
-        <div class="modal-header bg-warning text-white">
-          <h5 class="modal-title">Add User</h5>
-          <button class="close" data-dismiss="modal">
-            <span>&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-          <form>
-            <div class="form-group">
-              <label for="name">Name</label>
-              <input type="text" class="form-control">
-            </div>
-            <div class="form-group">
-              <label for="email">Email</label>
-              <input type="email" class="form-control">
-            </div>
-            <div class="form-group">
-              <label for="password">Password</label>
-              <input type="password" class="form-control">
-            </div>
-            <div class="form-group">
-              <label for="password2">Confirm Password</label>
-              <input type="password" class="form-control">
-            </div>
-          </form>
-        </div>
-        <div class="modal-footer">
-          <button class="btn btn-warning" data-dismiss="modal">Save Changes</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
 {% endblock %}
 
 {% block javascript %}
@@ -295,15 +231,11 @@
 
         function send_pay_prepare() {
             var confirm_sum_show = document.getElementById('payment_sum').value;
-            //var Subtotal_P = document.getElementById('Subtotal_P').value;
-            //var Order_IDP = document.getElementById('Order_IDP').value;
-            //var Customer_IDP = document.getElementById('Customer_IDP').value;
-            //var Signature = document.getElementById('Signature').value;
 
             if(confirm_sum_show===''){return;}
-            console.log(confirm_sum_show)
+            //console.log(confirm_sum_show)
             $.ajaxSetup({ headers: { "X-CSRFToken": getCookie("csrftoken"),
-                                    "X-Requested-With": "XMLHttpRequest" }});
+                                     "X-Requested-With": "XMLHttpRequest" }});
             $.ajax({
                 type: "POST",
                 url: "{% url 'pay_prepare' %}",
@@ -312,7 +244,7 @@
                 },
                 dataType: 'json',
                 success: function (data) {
-                    console.log(data.Order_IDP)
+                    //console.log(data.Order_IDP)
                     $("#confirm_sum_show").text(confirm_sum_show);
                     document.getElementById('Subtotal_P').value = data.Subtotal_P;
                     document.getElementById('Order_IDP').value = data.Order_IDP;
