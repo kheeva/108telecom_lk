@@ -1,6 +1,37 @@
 from django.db import models
 
 
+class Accounts(models.Model):
+    balance = models.FloatField()
+    account_name = models.CharField(max_length=255)
+    credit = models.FloatField()
+    flags = models.IntegerField()
+    is_blocked = models.IntegerField()
+    vat_rate = models.FloatField()
+    sale_tax_rate = models.FloatField()
+    int_status = models.IntegerField()
+    unlimited = models.IntegerField()
+    is_deleted = models.IntegerField()
+    external_id = models.CharField(max_length=255)
+
+    class Meta:
+        managed = False
+        db_table = 'accounts'
+
+
+class AccountTariffLink(models.Model):
+    account_id = models.IntegerField()
+    tariff_id = models.IntegerField()
+    next_tariff_id = models.IntegerField()
+    discount_period_id = models.IntegerField()
+    is_deleted = models.IntegerField()
+    link_date = models.IntegerField()
+
+    class Meta:
+        managed = False
+        db_table = 'account_tariff_link'
+
+
 class Users108(models.Model):
     login = models.CharField(max_length=255)
     password = models.CharField(max_length=255)
@@ -46,3 +77,36 @@ class Users108(models.Model):
     class Meta:
         managed = False
         db_table = 'users'
+
+
+class Tariffs(models.Model):
+    name = models.CharField(max_length=255)
+    create_date = models.IntegerField()
+    change_date = models.IntegerField()
+    who_change = models.IntegerField()
+    who_create = models.IntegerField()
+    expire_date = models.IntegerField()
+    balance_rollover = models.IntegerField()
+    is_deleted = models.IntegerField()
+    comments = models.CharField(max_length=255)
+    min_payment = models.PositiveSmallIntegerField()
+
+    class Meta:
+        managed = False
+        db_table = 'tariffs'
+
+
+class DiscountPeriods(models.Model):
+    start_date = models.IntegerField()
+    end_date = models.IntegerField()
+    periodic_type = models.IntegerField()
+    next_discount_period_id = models.IntegerField()
+    discount_interval = models.IntegerField()
+    canonical_len = models.IntegerField()
+    is_expired = models.IntegerField()
+    custom_duration = models.IntegerField()
+    static_id = models.IntegerField()
+
+    class Meta:
+        managed = False
+        db_table = 'discount_periods'

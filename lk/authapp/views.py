@@ -5,12 +5,12 @@ from django.contrib import auth
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
-from .models import Users108
+from .models import Accounts, AccountTariffLink, Users108, Tariffs, DiscountPeriods
 import time
 from hashlib import md5 as hashlib_md5
 import json
 import os
-import requests
+from datetime import datetime
 
 
 context = {}
@@ -108,13 +108,28 @@ class LoginFormView(View):
         password = request.POST.get('password')
         try:
             user_to_auth = get_user(username)
+            account_obj = Accounts.objects.get(pk=user_to_auth.id, is_deleted=0)
             context['user_obj'] = user_to_auth
-        except:
+            context['balance'] = int(account_obj.balance)
+
+            tariff_link_obj = AccountTariffLink.objects.get(account_id=user_to_auth.basic_account, is_deleted=0)
+
+            tariff_obj = Tariffs.objects.get(id=tariff_link_obj.tariff_id, is_deleted=0)
+            context['tariff_name'] = tariff_obj.name
+
+            discount_periods_obj = DiscountPeriods.objects.get(pk=tariff_link_obj.discount_period_id)
+            tariff_period = ' - '.join([datetime.utcfromtimestamp(discount_periods_obj.start_date).strftime('%d-%m-%Y'),
+                                        datetime.utcfromtimestamp(discount_periods_obj.end_date).strftime('%d-%m-%Y'),
+                                        ])
+            context['tariff_period'] = tariff_period
+
+        except Exception as e:
+            print(e)
             user_to_auth = None
 
         if user_to_auth is not None and user_to_auth.password == password:
             request.session['user_login'] = user_to_auth.login
-            return HttpResponseRedirect("/")
+            return HttpResponseRedirect("/", context)
         else:
             context['login_error'] = 'Ошибка: логин или пароль введены неверно.'
             return render(request, 'login.html', context)

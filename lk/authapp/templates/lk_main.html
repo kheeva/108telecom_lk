@@ -13,9 +13,9 @@
           <li class="nav-item px-2">
             <a href="index.html" class="nav-link active">Информация</a>
           </li>
-          <li class="nav-item px-2">
-            <a href="posts.html" class="nav-link">Финансы</a>
-          </li>
+          <!--<li class="nav-item px-2">-->
+            <!--<a href="posts.html" class="nav-link">Финансы</a>-->
+          <!--</li>-->
         </ul>
 
         <ul class="navbar-nav ml-auto">
@@ -27,7 +27,7 @@
               <!--<a href="profile.html" class="dropdown-item">-->
                 <!--<i class="fas fa-user-circle"></i> Profile-->
               <!--</a>-->
-              <a href="settings.html" class="dropdown-item">
+              <a href="#" class="dropdown-item">
                 <i class="fas fa-cog"></i> Настройки
               </a>
             </div>
@@ -55,113 +55,141 @@
   </header>
 
 
-  <!-- POSTS -->
+  <!-- Information -->
   <section id="posts">
     <div class="container">
       <div class="row">
         <div class="col-md-9">
           <div class="card">
             <div class="card-header">
-              <!--<h4>Latest Posts</h4>-->
             </div>
             <table class="table table-striped">
               <thead class="thead-light">
                 <tr>
                   <th></th>
                   <th></th>
+                  <th></th>
                 </tr>
               </thead>
               <tbody>
                 <tr>
-                  <td><i class="fal fa-user"></i></td>
-                  <td>{{user.log}}</td>
+                  <td><h5><i class="far fa-user"></i></h5></td>
+                  <td>ФИО</td>
+                  <td>{{user_obj.full_name}}</td>
+                </tr>
+                <tr>
+                  <td><h5><i class="fab fa-tumblr"></i></h5></td>
+                  <td>Тариф</td>
+                  <td>{{tariff_name}}</td>
+                </tr>
+                <tr>
+                  <td><h5><i class="far fa-clock"></i></h5></td>
+                  <td>Расчётный период</td>
+                  <td>{{tariff_period}}</td>
+                </tr>
+                <tr>
+                  <td><h5><i class="fab fa-btc"></i></h5></td>
+                  <td>Баланс</td>
+                  <td>{{balance}} рублей</td>
                 </tr>
               </tbody>
             </table>
           </div>
         </div>
-        <div class="col-md-3">
-          <div class="card text-center bg-primary text-white mb-3">
+
+        <!--buttons-->
+        <div class="col-md-3 pt-3">
+          <div class="card text-center bg-success text-white mb-3" id="card_balance">
             <div class="card-body">
-              <h3>Posts</h3>
+              <h3>Баланс</h3>
               <h4 class="display-4">
-                <i class="fas fa-pencil-alt"></i> 6
+                &#8381; {{balance}}
               </h4>
-              <a href="posts.html" class="btn btn-outline-light btn-sm">View</a>
+              <button class="btn btn-outline-light btn-md font-weight-bold" data-toggle="modal" data-target="#payModal">Пополнить</button>
             </div>
           </div>
 
-          <div class="card text-center bg-success text-white mb-3">
-            <div class="card-body">
-              <h3>Categories</h3>
-              <h4 class="display-4">
-                <i class="fas fa-folder"></i> 4
-              </h4>
-              <a href="categories.html" class="btn btn-outline-light btn-sm">View</a>
-            </div>
-          </div>
+          <!--<div class="card text-center bg-success text-white mb-3">-->
+            <!--<div class="card-body">-->
+              <!--<h3>Categories</h3>-->
+              <!--<h4 class="display-4">-->
+                <!--<i class="fas fa-folder"></i> 4-->
+              <!--</h4>-->
+              <!--<a href="categories.html" class="btn btn-outline-light btn-sm">View</a>-->
+            <!--</div>-->
+          <!--</div>-->
 
-          <div class="card text-center bg-warning text-white mb-3">
-            <div class="card-body">
-              <h3>Users</h3>
-              <h4 class="display-4">
-                <i class="fas fa-users"></i> 4
-              </h4>
-              <a href="users.html" class="btn btn-outline-light btn-sm">View</a>
-            </div>
-          </div>
-        </div>
+          <!--<div class="card text-center bg-warning text-white mb-3">-->
+            <!--<div class="card-body">-->
+              <!--<h3>Users</h3>-->
+              <!--<h4 class="display-4">-->
+                <!--<i class="fas fa-users"></i> 4-->
+              <!--</h4>-->
+              <!--<a href="users.html" class="btn btn-outline-light btn-sm">View</a>-->
+            <!--</div>-->
+          <!--</div>-->
+        <!--</div>-->
       </div>
     </div>
   </section>
 
   <!-- MODALS -->
 
-  <!-- ADD POST MODAL -->
-  <div class="modal fade" id="addPostModal">
-    <div class="modal-dialog modal-lg">
-      <div class="modal-content">
-        <div class="modal-header bg-primary text-white">
-          <h5 class="modal-title">Add Post</h5>
-          <button class="close" data-dismiss="modal">
-            <span>&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-          <form>
-            <div class="form-group">
-              <label for="title">Title</label>
-              <input type="text" class="form-control">
-            </div>
-            <div class="form-group">
-              <label for="category">Category</label>
-              <select class="form-control">
-                <option value="">Web Development</option>
-                <option value="">Tech Gadgets</option>
-                <option value="">Business</option>
-                <option value="">Health & Wellness</option>
-              </select>
-            </div>
-            <div class="form-group">
-              <label for="image">Upload Image</label>
-              <div class="custom-file">
-                <input type="file" class="custom-file-input" id="image">
-                <label for="image" class="custom-file-label">Choose File</label>
+  <!-- Balance MODAL -->
+  <!-- PAY_PREPARE MODAL -->
+    <div class="modal" id="payModal">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header bg-light">
+            <h5 class="modal-title">Пополнение лицевого счета</h5>
+            <button class="close" data-dismiss="modal">&times;</button>
+          </div>
+          <div class="modal-body">
+            <form>
+              <div class="form-group">
+                <label for="sum">Сумма в рублях</label>
+                <input id="payment_sum" name="payment_sum" type="number"
+                       min="10" value="10" step="1" placeholder="Сумма платежа"
+                       class="form-control" required onkeypress="return isNumber(event)" />
               </div>
-              <small class="form-text text-muted">Max Size 3mb</small>
-            </div>
-            <div class="form-group">
-              <label for="body">Body</label>
-              <textarea name="editor1" class="form-control"></textarea>
-            </div>
-          </form>
-        </div>
-        <div class="modal-footer">
-          <button class="btn btn-primary" data-dismiss="modal">Save Changes</button>
+            </form>
+          </div>
+          <div class="modal-footer bg-light">
+            <button class="btn btn-primary btn-md" data-dismiss="modal" onclick="send_pay_prepare()">Пополнить</button>
+          </div>
         </div>
       </div>
     </div>
-  </div>
+
+    <!-- PAY_CONFIRM MODAL -->
+    <div class="modal d-none" id="payConfirmModal">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header bg-light">
+            <p class="modal-title">Подтверждение платежа</p>
+            <button class="close" data-dismiss="modal">&times;</button>
+          </div>
+          <div class="modal-body">
+            <h5>Подтвердите платеж на сумму: <span id="confirm_sum_show"></span> рублей </h5><br />
+              <form action="https://wpay.uniteller.ru/pay/" method="POST">
+                <input type="hidden" name="Shop_IDP" value="00015162">
+                <input type="hidden" id="Order_IDP" name="Order_IDP" value="">
+                <input type="hidden" name="CallbackFields" value="Customer_IDP BillNumber Total">
+                <input type="hidden" id="Subtotal_P" name="Subtotal_P" value="">
+                <input type="hidden" id="Customer_IDP" name="Customer_IDP" value="">
+                <input type="hidden" id="Signature" name="Signature" value="">
+                <input type="hidden" name="URL_RETURN_OK" value="http://108telecom.ru/">
+                <input type="hidden" name="URL_RETURN_NO" value="http://108telecom.ru/">
+          </div>
+          <div class="modal-footer bg-light">
+              <input type="submit" class="btn btn-success btn-md" name="Submit" value="Оплатить">
+              </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
 
   <!-- ADD CATEGORY MODAL -->
   <div class="modal fade" id="addCategoryModal">
@@ -227,3 +255,74 @@
 
 {% endblock %}
 
+{% block javascript %}
+  <script>
+    // balance button color
+    var balance = {{balance}}
+    console.log(balance)
+    if (balance < 0){
+      $('#card_balance').removeClass( "bg-success" );
+      $('#card_balance').addClass( "bg-danger" );
+    }
+
+    //payment
+    function isNumber(evt) {
+            evt = (evt) ? evt : window.event;
+            var charCode = (evt.which) ? evt.which : evt.keyCode;
+            if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+                return false;
+            }
+            return true;
+        }
+
+
+        function getCookie(c_name)
+        {
+            if (document.cookie.length > 0)
+            {
+                c_start = document.cookie.indexOf(c_name + "=");
+                if (c_start != -1)
+                {
+                    c_start = c_start + c_name.length + 1;
+                    c_end = document.cookie.indexOf(";", c_start);
+                    if (c_end == -1) c_end = document.cookie.length;
+                    return unescape(document.cookie.substring(c_start,c_end));
+                }
+            }
+            return "";
+         }
+
+
+        function send_pay_prepare() {
+            var confirm_sum_show = document.getElementById('payment_sum').value;
+            //var Subtotal_P = document.getElementById('Subtotal_P').value;
+            //var Order_IDP = document.getElementById('Order_IDP').value;
+            //var Customer_IDP = document.getElementById('Customer_IDP').value;
+            //var Signature = document.getElementById('Signature').value;
+
+            if(confirm_sum_show===''){return;}
+            console.log(confirm_sum_show)
+            $.ajaxSetup({ headers: { "X-CSRFToken": getCookie("csrftoken"),
+                                    "X-Requested-With": "XMLHttpRequest" }});
+            $.ajax({
+                type: "POST",
+                url: "{% url 'pay_prepare' %}",
+                data: {
+                    'payment_sum': confirm_sum_show
+                },
+                dataType: 'json',
+                success: function (data) {
+                    console.log(data.Order_IDP)
+                    $("#confirm_sum_show").text(confirm_sum_show);
+                    document.getElementById('Subtotal_P').value = data.Subtotal_P;
+                    document.getElementById('Order_IDP').value = data.Order_IDP;
+                    document.getElementById('Customer_IDP').value = data.Customer_IDP;
+                    document.getElementById('Signature').value = data.Signature;
+                    $('#payConfirmModal').removeClass( "d-none" );
+                    $('#payConfirmModal').modal('show');
+                    //send_pay(data);
+                }
+            });
+        };
+  </script>
+{% endblock %}
