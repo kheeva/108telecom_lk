@@ -27,6 +27,8 @@ class Base(MiddlewareConfigMixin, Configuration):
     CACHES = {
         'default': {
             'BACKEND': 'django.core.cache.backends.locmem.LocMemCache'
+            #'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
+            #'LOCATION': '/tmp/django_cache',
         }
     }
     SESSION_EXPIRE_SECONDS = 600
@@ -109,5 +111,5 @@ class Base(MiddlewareConfigMixin, Configuration):
 
 
 class Dev(Base):
-    DEBUG = values.BooleanValue(True)
+    #DEBUG = values.BooleanValue(True)
     DATABASES = values.DatabaseURLValue()

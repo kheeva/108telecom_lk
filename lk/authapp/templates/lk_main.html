@@ -4,14 +4,14 @@
 {% block content %}
   <nav class="navbar navbar-expand-sm navbar-dark bg-dark p-0">
     <div class="container">
-      <a href="index.html" class="navbar-brand">108telecom</a>
+      <a href="#" class="navbar-brand">108telecom</a>
       <button class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarCollapse">
         <ul class="navbar-nav">
           <li class="nav-item px-2">
-            <a href="index.html" class="nav-link active">Информация</a>
+            <a href="#" class="nav-link active">Информация</a>
           </li>
           <!--<li class="nav-item px-2">-->
             <!--<a href="posts.html" class="nav-link">Финансы</a>-->
@@ -172,14 +172,14 @@
           <div class="modal-body">
             <h5>Подтвердите платеж на сумму: <span id="confirm_sum_show"></span> рублей </h5><br />
               <form action="https://wpay.uniteller.ru/pay/" method="POST">
-                <input type="hidden" name="Shop_IDP" value="00015162">
+                <input type="hidden" name="Shop_IDP" value="00015227">
                 <input type="hidden" id="Order_IDP" name="Order_IDP" value="">
                 <input type="hidden" name="CallbackFields" value="Customer_IDP BillNumber Total">
                 <input type="hidden" id="Subtotal_P" name="Subtotal_P" value="">
                 <input type="hidden" id="Customer_IDP" name="Customer_IDP" value="">
                 <input type="hidden" id="Signature" name="Signature" value="">
-                <input type="hidden" name="URL_RETURN_OK" value="http://108telecom.ru/">
-                <input type="hidden" name="URL_RETURN_NO" value="http://108telecom.ru/">
+                <input type="hidden" name="URL_RETURN_OK" value="http://lk.108telecom.ru/">
+                <input type="hidden" name="URL_RETURN_NO" value="http://lk.108telecom.ru/">
           </div>
           <div class="modal-footer bg-light">
               <input type="submit" class="btn btn-success btn-md" name="Submit" value="Оплатить">

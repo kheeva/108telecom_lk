@@ -1,16 +1,15 @@
-from django.shortcuts import render, HttpResponseRedirect
-from django.http import HttpResponse, Http404
-from django.views import View
-from django.contrib import auth
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.auth.models import User
-from .models import Accounts, AccountTariffLink, Users108, Tariffs, DiscountPeriods
 import time
-from hashlib import md5 as hashlib_md5
 import json
 import os
 from datetime import datetime
+from hashlib import md5 as hashlib_md5
+
+from django.shortcuts import render, HttpResponseRedirect
+from django.http import HttpResponse, Http404
+from django.views import View
+from django.contrib.auth.models import User
+
+from .models import Accounts, AccountTariffLink, Users108, Tariffs, DiscountPeriods
 
 
 context = {}
@@ -73,7 +72,7 @@ class PreparePaymentData(View):
                 )
 
             response_data = {}
-            response_data['Shop_IDP'] = '00015162'
+            response_data['Shop_IDP'] = '00015227'
             response_data['Order_IDP'] = generate_order_idp(_login, _sum)
             response_data['CallbackFields'] = 'Customer_IDP BillNumber Total'
             response_data['Subtotal_P'] = _sum
@@ -81,20 +80,13 @@ class PreparePaymentData(View):
             response_data['URL_RETURN_OK'] = 'http://lk.108telecom.ru/'
             response_data['URL_RETURN_NO'] = 'http://lk.108telecom.ru/'
 
-            # os.environ.get('UNITELLER_PASSWORD')
             _signature = make_signature(response_data, os.environ.get('DJANGO_UNITELLER_PASSWORD'))
             response_data['Signature'] = _signature
-
-            # r = requests.post("https://wpay.uniteller.ru/pay/", data=response_data)
 
             return HttpResponse(
                 json.dumps(response_data),
                 content_type="application/json"
             )
-            # return HttpResponse(
-            #     r.text,
-            #     content_type="text/html"
-            # )
         else:
             return Http404
 
@@ -108,23 +100,7 @@ class LoginFormView(View):
         password = request.POST.get('password')
         try:
             user_to_auth = get_user(username)
-            account_obj = Accounts.objects.get(pk=user_to_auth.id, is_deleted=0)
-            context['user_obj'] = user_to_auth
-            context['balance'] = int(account_obj.balance)
-
-            tariff_link_obj = AccountTariffLink.objects.get(account_id=user_to_auth.basic_account, is_deleted=0)
-
-            tariff_obj = Tariffs.objects.get(id=tariff_link_obj.tariff_id, is_deleted=0)
-            context['tariff_name'] = tariff_obj.name
-
-            discount_periods_obj = DiscountPeriods.objects.get(pk=tariff_link_obj.discount_period_id)
-            tariff_period = ' - '.join([datetime.utcfromtimestamp(discount_periods_obj.start_date).strftime('%d-%m-%Y'),
-                                        datetime.utcfromtimestamp(discount_periods_obj.end_date).strftime('%d-%m-%Y'),
-                                        ])
-            context['tariff_period'] = tariff_period
-
         except Exception as e:
-            print(e)
             user_to_auth = None
 
         if user_to_auth is not None and user_to_auth.password == password:
@@ -148,11 +124,28 @@ class Main(View):
     def get(self, request):
         _user_login = request.session.get('user_login')
         if _user_login is not None:
-            context['page'] = '108'
-            context['sess'] = {}
             context['user_login'] = _user_login
-            for name, value in request.session.items():
-                context['sess'][name] = value
+            user_to_auth = get_user(_user_login)
+            account_obj = Accounts.objects.get(pk=user_to_auth.id, is_deleted=0)
+            context['user_obj'] = user_to_auth
+            context['balance'] = int(account_obj.balance)
+
+            tariff_link_obj = AccountTariffLink.objects.get(
+                                    account_id=user_to_auth.basic_account,
+                                    is_deleted=0)
+
+            tariff_obj = Tariffs.objects.get(id=tariff_link_obj.tariff_id,
+                                             is_deleted=0)
+            context['tariff_name'] = tariff_obj.name
+
+            discount_periods_obj = DiscountPeriods.objects.get(pk=tariff_link_obj.discount_period_id)
+            tariff_period = ' - '.join([datetime.utcfromtimestamp(
+                                        discount_periods_obj.start_date).strftime('%d-%m-%Y'),
+                                        datetime.utcfromtimestamp(
+                                        discount_periods_obj.end_date).strftime('%d-%m-%Y'),
+                                        ]
+            )
+            context['tariff_period'] = tariff_period
 
             return render(request, 'lk_main.html', context)
         else:
