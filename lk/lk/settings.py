@@ -24,11 +24,21 @@ class Base(MiddlewareConfigMixin, Configuration):
     ALLOWED_HOSTS = values.ListValue()
 
     SESSION_ENGINE = 'django.contrib.sessions.backends.cache'
-    CACHES = {
-        'default': {
-            'BACKEND': 'django.core.cache.backends.locmem.LocMemCache'
+    #CACHES = {
+    #    'default': {
+    #        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache'
             #'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
             #'LOCATION': '/tmp/django_cache',
+    #    }
+    #}
+    CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://127.0.0.1:6379/1",
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient"
+        },
+        "KEY_PREFIX": "example"
         }
     }
     SESSION_EXPIRE_SECONDS = 600
