@@ -126,26 +126,32 @@ class Main(View):
         if _user_login is not None:
             context['user_login'] = _user_login
             user_to_auth = get_user(_user_login)
-            account_obj = Accounts.objects.get(pk=user_to_auth.id, is_deleted=0)
             context['user_obj'] = user_to_auth
-            context['balance'] = int(account_obj.balance)
 
-            tariff_link_obj = AccountTariffLink.objects.get(
-                                    account_id=user_to_auth.basic_account,
-                                    is_deleted=0)
+            account_obj = Accounts.objects.get(pk=user_to_auth.id, is_deleted=0)
 
-            tariff_obj = Tariffs.objects.get(id=tariff_link_obj.tariff_id,
-                                             is_deleted=0)
-            context['tariff_name'] = tariff_obj.name
+            context['balance'] = round(account_obj.balance-0.5)
 
-            discount_periods_obj = DiscountPeriods.objects.get(pk=tariff_link_obj.discount_period_id)
-            tariff_period = ' - '.join([datetime.utcfromtimestamp(
-                                        discount_periods_obj.start_date).strftime('%d-%m-%Y'),
-                                        datetime.utcfromtimestamp(
-                                        discount_periods_obj.end_date).strftime('%d-%m-%Y'),
-                                        ]
-            )
-            context['tariff_period'] = tariff_period
+            try:
+                tariff_link_obj = AccountTariffLink.objects.get(
+                                        account_id=user_to_auth.basic_account,
+                                        is_deleted=0)
+            except:
+                context['tariff_name'] = 'Тариф не установлен'
+                context['tariff_period'] = 'Расчетный период не установлен'
+            else:
+                tariff_obj = Tariffs.objects.get(id=tariff_link_obj.tariff_id,
+                                                 is_deleted=0)
+                context['tariff_name'] = tariff_obj.name
+
+                discount_periods_obj = DiscountPeriods.objects.get(pk=tariff_link_obj.discount_period_id)
+                tariff_period = ' - '.join([datetime.utcfromtimestamp(
+                                            discount_periods_obj.start_date).strftime('%d-%m-%Y'),
+                                            datetime.utcfromtimestamp(
+                                            discount_periods_obj.end_date).strftime('%d-%m-%Y'),
+                                            ]
+                )
+                context['tariff_period'] = tariff_period
 
             return render(request, 'lk_main.html', context)
         else:
