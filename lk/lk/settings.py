@@ -121,5 +121,10 @@ class Base(MiddlewareConfigMixin, Configuration):
 
 
 class Dev(Base):
-    #DEBUG = values.BooleanValue(True)
+    DEBUG = values.BooleanValue(True)
     DATABASES = values.DatabaseURLValue()
+
+
+class Prod(Base):
+    DATABASES = values.DatabaseURLValue()
+
