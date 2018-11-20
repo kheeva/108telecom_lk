@@ -24,13 +24,7 @@ class Base(MiddlewareConfigMixin, Configuration):
     ALLOWED_HOSTS = values.ListValue()
 
     SESSION_ENGINE = 'django.contrib.sessions.backends.cache'
-    #CACHES = {
-    #    'default': {
-    #        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache'
-            #'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
-            #'LOCATION': '/tmp/django_cache',
-    #    }
-    #}
+
     CACHES = {
     "default": {
         "BACKEND": "django_redis.cache.RedisCache",
