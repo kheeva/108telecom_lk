@@ -54,7 +54,7 @@ def make_signature(post_attrs, _password):
 
 def get_user(username):
     try:
-        return Users108.objects.get(login=username)
+        return Users108.objects.get(login=username, is_deleted=0)
     except User.DoesNotExist:
         return None
 
