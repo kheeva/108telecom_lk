@@ -60,6 +60,19 @@
     <div class="container">
       <div class="row">
         <div class="col-md-9">
+
+          <!-- Notices -->
+          {% if notices %}
+            <div class="alert alert-danger alert-dismissible mt-3">
+              <button class="close" type="button" data-dismiss="alert">
+                <span>&times;</span>
+              </button>
+              {% for notice in notices %}
+                <p>{{notice}}</p>
+              {% endfor %}
+            </div>
+          {% endif %}
+
           <div class="card">
             <div class="card-header">
             </div>
@@ -105,19 +118,27 @@
               <h4 class="display-4">
                 &#8381; {{balance}}
               </h4>
-              <button class="btn btn-outline-light btn-md font-weight-bold" data-toggle="modal" data-target="#payModal">Пополнить</button>
+              <button class="btn btn-block btn-outline-light btn-md font-weight-bold" data-toggle="modal" data-target="#payModal">Пополнить</button>
+              {% if promised_pay %}
+                <button class="btn btn-block btn-outline-light btn-md mt-2 font-weight-bold" data-toggle="modal" data-target="#promisedModal">Обещанный платеж</button>
+              {% endif %}
             </div>
           </div>
 
-          <!--<div class="card text-center bg-success text-white mb-3">-->
-            <!--<div class="card-body">-->
-              <!--<h3>Categories</h3>-->
-              <!--<h4 class="display-4">-->
-                <!--<i class="fas fa-folder"></i> 4-->
-              <!--</h4>-->
-              <!--<a href="categories.html" class="btn btn-outline-light btn-sm">View</a>-->
+          <!--{% if promised_pay %}-->
+            <!--<div class="card text-center bg-warning text-white mb-3">-->
+              <!--<div class="card-body">-->
+                <!--<h3>Categories</h3>-->
+                <!--<h4 class="display-4">-->
+                  <!--<i class="fas fa-folder"></i> 4-->
+                <!--</h4>-->
+                <!--<a href="categories.html" class="btn btn-outline-light btn-sm">View</a>-->
+              <!--</div>-->
             <!--</div>-->
-          <!--</div>-->
+            <!--<p>promised pay: {{ promised_pay }}</p>-->
+          <!--{% else %}-->
+            <!--<p>promised pay is unavailable: {{ promised_pay }}</p>-->
+          <!--{% endif %}-->
 
           <!--<div class="card text-center bg-warning text-white mb-3">-->
             <!--<div class="card-body">-->
@@ -188,5 +209,53 @@
         </div>
       </div>
     </div>
+
+    <!-- Promised pay MODAL -->
+    <div class="modal" id="promisedModal">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header bg-light">
+            <h5 class="modal-title">Обещанный платеж</h5>
+            <button class="close" data-dismiss="modal">&times;</button>
+          </div>
+          <div class="modal-body">
+            <p>"Обещанный платеж" возобновляет работу услуг на 2 дня,
+              не смотря на отрицательный баланс.
+              Улугой "обещанный платеж" возможно воспользоваться лишь один раз в 30 дней.
+              Просим Вас пополнить баланс до истечения действия "обещанного платежа"
+              во избежание блокировки услуг.
+            </p>
+          </div>
+          <div class="modal-footer bg-light">
+            <button class="btn btn-success btn-md" data-dismiss="modal" onclick="send_promised_pay({{balance}}, {{user_obj.basic_account}})">Подтвердить "обещанный платеж"</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    {% if notices %}
+    <!-- Alerts MODAL -->
+      <div class="modal" id="alertsModal">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header bg-light">
+              <h5 class="modal-title">Внимание</h5>
+              <button class="close" data-dismiss="modal">&times;</button>
+            </div>
+              {% for alert in alerts %}
+                <div class="alert alert-info">{{alert}}</div>
+              {% endfor %}
+            <div class="modal-footer bg-light">
+              <button class="btn btn-info btn-md" data-dismiss="modal">Понял</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    {% endif %}
+
     <script language="JavaScript" type="text/javascript" src="{% static 'js/lk_main.js' %}"></script>
+    <script language="JavaScript" type="text/javascript">
+      window.addEventListener('load', function(){set_balance_color({{account_obj.int_status}});}, false);
+      window.addEventListener('load', function(){show_alerts();}, false);
+    </script>
 {% endblock %}

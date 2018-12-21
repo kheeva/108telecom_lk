@@ -110,3 +110,31 @@ class DiscountPeriods(models.Model):
     class Meta:
         managed = False
         db_table = 'discount_periods'
+
+
+class PaymentTransactions(models.Model):
+    account_id = models.IntegerField()
+    payment_incurrency = models.FloatField()
+    currency_id = models.IntegerField()
+    currency_rate = models.FloatField()
+    payment_absolute = models.FloatField()
+    actual_date = models.IntegerField()
+    payment_enter_date = models.IntegerField()
+    payment_ext_number = models.CharField(max_length=255, blank=True, null=True)
+    method = models.IntegerField()
+    who_receive = models.IntegerField()
+    comments_for_user = models.CharField(max_length=255, blank=True, null=True)
+    comments_for_admins = models.CharField(max_length=255, blank=True, null=True)
+    burn_time = models.IntegerField()
+    is_canceled = models.IntegerField()
+    cancel_id = models.IntegerField()
+    hash = models.CharField(max_length=255)
+    charge_id = models.IntegerField()
+    ic_status = models.IntegerField()
+    ic_id = models.CharField(max_length=255)
+    last_sync_date = models.IntegerField()
+    is_sms_notificated = models.SmallIntegerField()
+
+    class Meta:
+        managed = False
+        db_table = 'payment_transactions'

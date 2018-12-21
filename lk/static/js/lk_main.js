@@ -1,10 +1,19 @@
-window.onload = function() {
-    set_balance_color({balance});
+function show_alerts(){
+    if (sessionStorage.getItem('alerts') == 1){
+        return 0;
+    }
+
+    $('#alertsModal').modal('show');
+    $('#alertsModal').on('hidden.bs.modal',
+        function () {
+            sessionStorage.setItem('alerts', 1);
+        }
+    )
 }
 
 
-function set_balance_color(user_balance) {
-    if (user_balance < 0){
+function set_balance_color(int_status) {
+    if (int_status == 0){
       $('#card_balance').removeClass( "bg-success" );
       $('#card_balance').addClass( "bg-danger" );
     }
@@ -65,3 +74,23 @@ function send_pay_prepare() {
         }
     });
 };
+
+
+function send_promised_pay(balance, account_id) {
+    $.ajaxSetup({ headers: { "X-CSRFToken": getCookie("csrftoken"),
+                             "X-Requested-With": "XMLHttpRequest"
+    }});
+
+    $.ajax({
+        type: "POST",
+        url: "/promised_pay/",
+        data: {
+            'balance': balance,
+            'account_id': account_id,
+        },
+        dataType: 'json',
+        success: function (data) {
+            location.reload();
+        }
+    });
+}
