@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<urfa>
+    <parameter name="user_id"/>
+    <parameter name="account_id"/>
+    <parameter name="slink_id"/>
+    <parameter name="service_id"/>
+    <parameter name="service_type" value="3"/>
+    <parameter name="discount_period_id"/>
+    <parameter name="ip_address"/>
+    <parameter name="mac"/>
+    <parameter name="ip_not_vpn" value="0"/>
+    <parameter name="mask" value="255.255.255.255"/>
+    <parameter name="return_type" value="integer_return"/>
+<call function="rpcf_add_service_to_user"/>
+</urfa> 

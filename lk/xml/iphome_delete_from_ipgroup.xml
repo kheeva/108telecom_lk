@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<urfa>
+        <parameter name="ip_group_id"/>
+        <parameter name="ip_address"/>
+<call function="rpcf_delete_from_ipgroup_by_ipgroup"/>
+</urfa> 
